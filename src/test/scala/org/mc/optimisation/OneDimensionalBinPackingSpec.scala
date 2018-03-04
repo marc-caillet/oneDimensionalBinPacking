@@ -20,7 +20,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
   "The stringToItems method" should "create a list of items" in {
     val itemString = "163841689525773"
-    val itemList = OneDimensionalBinPackingSolver.stringToItems(itemString)
+    val itemList = OneDimensionalBinPackingSolver.Items.stringToList(itemString)
 
     itemList shouldBe a [List[_]]
     itemList foreach(_ shouldBe a [Item])
@@ -28,19 +28,19 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
   it should "create a list which number of elements equals the number of characters in the input string" in {
     val itemString = "163841689525773"
-    val itemList = OneDimensionalBinPackingSolver.stringToItems(itemString)
+    val itemList = OneDimensionalBinPackingSolver.Items.stringToList(itemString)
 
     itemList.size should equal (itemString.length)
   }
 
   "The numBins" should "be 0 when the list of bins is empty" in {
     val bins = List[Bin]()
-    OneDimensionalBinPackingSolver.numBins(bins) should equal (0)
+    OneDimensionalBinPackingSolver.Bins.num(bins) should equal (0)
   }
 
   it should "be 2 when the list of bins contains 2 elements" in {
     val bins = List[Bin](Bin(List[Item](),10, 0),Bin(List[Item](),10, 1))
-    OneDimensionalBinPackingSolver.numBins(bins) should equal (2)
+    OneDimensionalBinPackingSolver.Bins.num(bins) should equal (2)
   }
 
   "The naive strategy" should "use a number of bins that at least equals the lower bound" in {
