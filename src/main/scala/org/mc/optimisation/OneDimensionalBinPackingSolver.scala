@@ -16,7 +16,9 @@ object OneDimensionalBinPackingSolver {
     * An Item is defined by its one-dimensional size
     * @param size The size of the item
     */
-  case class Item(size: Int)
+  case class Item(size: Int) {
+    override def toString: String = size.toString
+  }
 
   /**
     * A Bin is defined by:
@@ -28,7 +30,9 @@ object OneDimensionalBinPackingSolver {
     * @param capacity The remaining capacity
     * @param id The identifier of the bin
     */
-  case class Bin(items: List[Item], capacity: Int, id: Int)
+  case class Bin(items: List[Item], capacity: Int, id: Int) {
+    override def toString: String = (for (item <- items) yield item.toString) mkString ""
+  }
 
 
 
@@ -238,7 +242,7 @@ object OneDimensionalBinPackingSolver {
     * @param bins The list of bins
     * @return A pretty string
     */
-  def prettyPrintBins(bins: List[Bin]): String = bins map (_.items map(_.size) mkString "") mkString "/"
+  def prettyPrintBins(bins: List[Bin]): String = (for (bin <- bins) yield bin.toString) mkString "/"
 
   /**
     * Computes the number of bins in a list of bins
