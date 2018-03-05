@@ -229,7 +229,7 @@ object OneDimensionalBinPackingSolver {
     private[OneDimensionalBinPackingSolver] def wfSelector(item: Item, bins: List[Bin]): Option[Bin] =
       select(
         evaluateAll(item, bins),
-        Some(Bins.sortByDecreasingCapacity)
+        Some(sortByDecreasingCapacity)
       )
 
     /**
