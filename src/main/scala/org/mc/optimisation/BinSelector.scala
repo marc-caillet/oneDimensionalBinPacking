@@ -3,7 +3,7 @@ package org.mc.optimisation
 import scala.collection.immutable.List
 
 /**
-  * This trait defines some bin selectors
+  * This trait defines some bin selectors that select the best bin in a collection of bins
   * @tparam I An Item type
   * @tparam B A Bin type
   */
@@ -23,7 +23,7 @@ trait BinSelector[I <: Item, B <: Bin] {
     * @param bins The list of bins
     * @return Some bin if one has been found; None otherwise
     */
-  private def select(binEvaluate: (I,List[B]) => List[B])
+  private def select(binEvaluate: (I, List[B]) => List[B])
                     (binSort: List[B] => List[B])
                     (item: I, bins: List[B]): Option[B] =
 
@@ -36,7 +36,7 @@ trait BinSelector[I <: Item, B <: Bin] {
     * Evaluates the capacity of the last bin regarding the item size (evaluateLast),
     * then returns it if it can fit the item.
     */
-  val naiveSelect: (I,List[B]) => Option[B] = select(evaluateLastBin)(unSortBins)(_,_)
+  val naiveSelect: (I, List[B]) => Option[B] = select(evaluateLastBin)(unSortBins)(_,_)
 
   /**
     * For a given item, finds the first bin that matches the first fit condition,
@@ -48,7 +48,7 @@ trait BinSelector[I <: Item, B <: Bin] {
     *   <li>Returns the first one</li>
     * </ul>
     */
-  val ffSelect: (I,List[B]) => Option[B] = select(evaluateAllBins)(unSortBins)(_,_)
+  val ffSelect: (I, List[B]) => Option[B] = select(evaluateAllBins)(unSortBins)(_,_)
 
   /**
     * For a given item, finds a bin that matches the best fit condition, i.e. the bin that will have the least room
@@ -60,7 +60,7 @@ trait BinSelector[I <: Item, B <: Bin] {
     *   <li>Returns the first one</li>
     * </ul>
     */
-  val bfSelect: (I,List[B]) => Option[B] = select(evaluateAllBins)(sortBinsByIncreasingCapacity)(_,_)
+  val bfSelect: (I, List[B]) => Option[B] = select(evaluateAllBins)(sortBinsByIncreasingCapacity)(_,_)
 
   /**
     * For a given item, finds a bin that matches the worst fit condition, i.e. the bin that will have the most room
@@ -72,7 +72,7 @@ trait BinSelector[I <: Item, B <: Bin] {
     *   <li>Returns the first one</li>
     * </ul>
     */
-  val wfSelect: (I,List[B]) => Option[B] = select(evaluateAllBins)(sortBinsByDecreasingCapacity)(_,_)
+  val wfSelect: (I, List[B]) => Option[B] = select(evaluateAllBins)(sortBinsByDecreasingCapacity)(_,_)
 
   /**
     * Given an item, evaluates whether or not the item can fit in the last bin.
@@ -111,20 +111,4 @@ trait BinSelector[I <: Item, B <: Bin] {
     * @return A sorted list of bins
     */
   def sortBinsByIncreasingCapacity(bins: List[B]): List[B]
-
-  /**
-    * Pretty prints a list of bins
-    *
-    * @param bins The list of bins
-    * @return A pretty string
-    */
-  def prettyPrint(bins: List[B]): String = (for (bin <- bins) yield bin.toString) mkString "/"
-
-  /**
-    * Computes the number of bins in a list of bins
-    *
-    * @param bins The list of bins
-    * @return The number of bins
-    */
-  def num(bins: List[B]): Int = bins.size
 }

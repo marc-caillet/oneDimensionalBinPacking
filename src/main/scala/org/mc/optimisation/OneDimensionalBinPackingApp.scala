@@ -1,5 +1,6 @@
 package org.mc.optimisation
 
+import OneDimensionalBinPackingSolver._
 
 object OneDimensionalBinPackingApp extends App {
 
@@ -12,35 +13,28 @@ object OneDimensionalBinPackingApp extends App {
 
       println(s"Articles : ${args(0)}")
       println(s"Capacité : ${args(1)}")
-      println(s"Borne inférieure du nombre de cartons : ${OneDimensionalBinPackingSolver.lowerBound(items, capacity)}")
+      println(s"Borne inférieure du nombre de cartons : ${lowerBound(items, capacity)}")
 
-      val naiveBins = OneDimensionalBinPackingSolver.naive(items, capacity)
-      println(s"Robot glouton naïf : ${OneDimensionalBinPackingSolver.prettyPrint(naiveBins)} " +
-        s"=> ${OneDimensionalBinPackingSolver.num(naiveBins)} cartons utilisés")
+      val naiveBins = naive(items, capacity)
+      println(prettyFormatBinPackingSolution("Robot glouton naïf", naiveBins))
 
-      val ffBins = OneDimensionalBinPackingSolver.ff(items, capacity)
-      println(s"Robot glouton (First Fit) : ${OneDimensionalBinPackingSolver.prettyPrint(ffBins)} " +
-        s"=> ${OneDimensionalBinPackingSolver.num(ffBins)} cartons utilisés")
+      val ffBins = ff(items, capacity)
+      println(prettyFormatBinPackingSolution("Robot glouton (First Fit)", ffBins))
 
-      val ffdBins = OneDimensionalBinPackingSolver.ffd(items, capacity)
-      println(s"Robot glouton (First Fit Decreasing) : ${OneDimensionalBinPackingSolver.prettyPrint(ffdBins)} " +
-        s"=> ${OneDimensionalBinPackingSolver.num(ffdBins)} cartons utilisés")
+      val ffdBins = ffd(items, capacity)
+      println(prettyFormatBinPackingSolution("Robot glouton (First Fit Decreasing)", ffdBins))
 
-      val bfBins = OneDimensionalBinPackingSolver.bf(items, capacity)
-      println(s"Robot glouton (Best Fit) : ${OneDimensionalBinPackingSolver.prettyPrint(bfBins)} " +
-        s"=> ${OneDimensionalBinPackingSolver.num(bfBins)} cartons utilisés")
+      val bfBins = bf(items, capacity)
+      println(prettyFormatBinPackingSolution("Robot glouton (Best Fit)", bfBins))
 
-      val bfdBins = OneDimensionalBinPackingSolver.bfd(items, capacity)
-      println(s"Robot glouton (Best Fit Decreasing) : ${OneDimensionalBinPackingSolver.prettyPrint(bfdBins)} " +
-        s"=> ${OneDimensionalBinPackingSolver.num(bfdBins)} cartons utilisés")
+      val bfdBins = bfd(items, capacity)
+      println(prettyFormatBinPackingSolution("Robot glouton (Best Fit Decreasing)", bfdBins))
 
-      val wfBins = OneDimensionalBinPackingSolver.wf(items, capacity)
-      println(s"Robot glouton (Worst Fit) : ${OneDimensionalBinPackingSolver.prettyPrint(wfBins)} " +
-        s"=> ${OneDimensionalBinPackingSolver.num(wfBins)} cartons utilisés")
+      val wfBins = wf(items, capacity)
+      println(prettyFormatBinPackingSolution("Robot glouton (Worst Fit)", wfBins))
 
-      val wfdBins = OneDimensionalBinPackingSolver.wfd(items, capacity)
-      println(s"Robot glouton (Worst Fit Decreasing) : ${OneDimensionalBinPackingSolver.prettyPrint(wfdBins)} " +
-        s"=> ${OneDimensionalBinPackingSolver.num(wfdBins)} cartons utilisés")
+      val wfdBins = wfd(items, capacity)
+      println(prettyFormatBinPackingSolution("Robot glouton (Worst Fit Decreasing)", wfdBins))
 
     case _ => println(
       s"""

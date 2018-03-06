@@ -34,12 +34,12 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
   "The numBins" should "be 0 when the list of bins is empty" in {
     val bins = List[OneD_Bin]()
-    OneDimensionalBinPackingSolver.num(bins) should equal (0)
+    OneDimensionalBinPackingSolver.numBins(bins) should equal (0)
   }
 
   it should "be 2 when the list of bins contains 2 elements" in {
     val bins = List[OneD_Bin](OneD_Bin(List[OneD_Item](),OneD_Capacity(10), 0),OneD_Bin(List[OneD_Item](),OneD_Capacity(10), 1))
-    OneDimensionalBinPackingSolver.num(bins) should equal (2)
+    OneDimensionalBinPackingSolver.numBins(bins) should equal (2)
   }
 
   "The naive strategy" should "use a number of bins that at least equals the lower bound" in {

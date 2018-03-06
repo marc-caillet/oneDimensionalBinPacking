@@ -77,4 +77,27 @@ trait BinPackingSolver[I <: Item, B <: Bin, C<: Capacity] extends BinSelector[I,
     * but first sorts the list of items in decreasing order, thus packs bigger items first
     */
   val wfd: (String, C) => List[B] = greedy(wfSelect)(stringToSortedListByDecreasingSize)(_, _)
+
+
+
+  // UTILS
+
+  /**
+    * Pretty prints a list of bins
+    *
+    * @param bins The list of bins
+    * @return A pretty string
+    */
+  def prettyFormatBins(bins: List[B]): String = (for (bin <- bins) yield bin.toString) mkString "/"
+
+  /**
+    * Computes the number of bins in a list of bins
+    *
+    * @param bins The list of bins
+    * @return The number of bins
+    */
+  def numBins(bins: List[B]): Int = bins.size
+
+  def prettyFormatBinPackingSolution(label: String, bins: List[B]): String =
+    s"$label : ${prettyFormatBins(bins)} => ${numBins(bins)} cartons utilisés"
 }
