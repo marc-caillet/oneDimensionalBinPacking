@@ -1,4 +1,4 @@
-package org.mc.optimisation
+package org.mc.optimisation.oneD
 
 import org.scalatest.{FlatSpec, Matchers, PrivateMethodTester}
 

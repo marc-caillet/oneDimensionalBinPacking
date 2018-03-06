@@ -1,4 +1,6 @@
-package org.mc.optimisation
+package org.mc.optimisation.oneD
+
+import org.mc.optimisation.generic.{Bin, BinPackingSolver, Capacity, Item}
 
 import scala.annotation.tailrec
 import scala.collection.immutable.List
@@ -158,37 +160,4 @@ object OneDimensionalBinPackingSolver extends BinPackingSolver[OneD_Item,OneD_Bi
     */
   def sortItemsByDecreasingSize(items: List[OneD_Item]): List[OneD_Item] =
     items sortWith (_.size > _.size)
-}
-
-/**
-  * A OneD_Item is defined by its one-dimensional size
-  *
-  * @param size The one-dimensional size of the item
-  */
-case class OneD_Item(size: Int) extends Item {
-  override def toString: String = size.toString
-}
-
-/**
-  * A OneD_Bin is defined by:
-  * <ul>
-  * <li>The list of items it contains</li>
-  * <li>Its remaining one-dimensional capacity</li>
-  * <li> An identifier</li>
-  * </ul>
-  *
-  * @param items    The list of items
-  * @param capacity The remaining one-dimensional capacity
-  * @param id       The identifier of the bin
-  */
-case class OneD_Bin(items: List[OneD_Item], capacity: OneD_Capacity, id: Int) extends Bin {
-  override def toString: String = (for (item <- items) yield item.toString) mkString ""
-}
-
-/**
-  * A OneD_Capacity is defined by a one-dimensional amount
-  * @param amount The one-dimensional amount
-  */
-case class OneD_Capacity(amount: Int) extends Capacity {
-  override def toString: String = amount.toString
 }

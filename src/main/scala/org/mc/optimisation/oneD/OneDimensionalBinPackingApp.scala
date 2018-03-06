@@ -1,6 +1,6 @@
-package org.mc.optimisation
+package org.mc.optimisation.oneD
 
-import OneDimensionalBinPackingSolver._
+import org.mc.optimisation.oneD.OneDimensionalBinPackingSolver._
 
 object OneDimensionalBinPackingApp extends App {
 

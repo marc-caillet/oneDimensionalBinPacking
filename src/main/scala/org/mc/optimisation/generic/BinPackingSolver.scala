@@ -1,4 +1,4 @@
-package org.mc.optimisation
+package org.mc.optimisation.generic
 
 import scala.collection.immutable.List
 
