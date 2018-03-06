@@ -8,7 +8,7 @@ object OneDimensionalBinPackingApp extends App {
     case 2 =>
 
       val items: String = args(0)
-      val capacity: Int = args(1).toInt
+      val capacity: OneD_Capacity = OneD_Capacity(args(1).toInt)
 
       println(s"Articles : ${args(0)}")
       println(s"Capacité : ${args(1)}")
