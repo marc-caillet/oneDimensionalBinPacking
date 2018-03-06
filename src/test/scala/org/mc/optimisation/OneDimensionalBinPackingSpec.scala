@@ -1,46 +1,45 @@
 package org.mc.optimisation
 
-import org.mc.optimisation.OneDimensionalBinPackingSolver.{Bin, Item}
 import org.scalatest.{FlatSpec, Matchers, PrivateMethodTester}
 
 
 class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMethodTester {
 
   "The lowerBound" should " 1 when the sum of all the items' size is less than a bin's capacity" in {
-    val bin = Bin(List(), 10, 0)
-    val items = List(Item(1),Item(6))
+    val bin = OneD_Bin(List(), 10, 0)
+    val items = "16"
     OneDimensionalBinPackingSolver.lowerBound(items, bin.capacity) should equal (1)
   }
 
   it should "be 1 when the sum of all the items' size equals a bin's capacity" in {
-    val bin = Bin(List(), 10, 0)
-    val items = List(Item(1),Item(6),Item(3))
+    val bin = OneD_Bin(List(), 10, 0)
+    val items = "163"
     OneDimensionalBinPackingSolver.lowerBound(items, bin.capacity) should equal (1)
   }
 
   "The stringToItems method" should "create a list of items" in {
     val itemString = "163841689525773"
-    val itemList = OneDimensionalBinPackingSolver.Items.stringToList(itemString)
+    val itemList = OneDimensionalBinPackingSolver.stringToUnsortedList(itemString)
 
     itemList shouldBe a [List[_]]
-    itemList foreach(_ shouldBe a [Item])
+    itemList foreach(_ shouldBe a [OneD_Item])
   }
 
   it should "create a list which number of elements equals the number of characters in the input string" in {
     val itemString = "163841689525773"
-    val itemList = OneDimensionalBinPackingSolver.Items.stringToList(itemString)
+    val itemList = OneDimensionalBinPackingSolver.stringToUnsortedList(itemString)
 
     itemList.size should equal (itemString.length)
   }
 
   "The numBins" should "be 0 when the list of bins is empty" in {
-    val bins = List[Bin]()
-    OneDimensionalBinPackingSolver.Bins.num(bins) should equal (0)
+    val bins = List[OneD_Bin]()
+    OneDimensionalBinPackingSolver.num(bins) should equal (0)
   }
 
   it should "be 2 when the list of bins contains 2 elements" in {
-    val bins = List[Bin](Bin(List[Item](),10, 0),Bin(List[Item](),10, 1))
-    OneDimensionalBinPackingSolver.Bins.num(bins) should equal (2)
+    val bins = List[OneD_Bin](OneD_Bin(List[OneD_Item](),10, 0),OneD_Bin(List[OneD_Item](),10, 1))
+    OneDimensionalBinPackingSolver.num(bins) should equal (2)
   }
 
   "The naive strategy" should "use a number of bins that at least equals the lower bound" in {
@@ -59,7 +58,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val naiveBins = OneDimensionalBinPackingSolver.naive(items, capacity)
 
-    naiveBins should equal (List(Bin(List(Item(6),Item(3)),1,0)))
+    naiveBins should equal (List(OneD_Bin(List(OneD_Item(6),OneD_Item(3)),1,0)))
   }
 
   it should "pack each item into the last bin if the item size equals this bin's remaining capacity" in {
@@ -68,7 +67,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val naiveBins = OneDimensionalBinPackingSolver.naive(items, capacity)
 
-    naiveBins should equal (List(Bin(List(Item(6),Item(4)),0,0)))
+    naiveBins should equal (List(OneD_Bin(List(OneD_Item(6),OneD_Item(4)),0,0)))
   }
 
   it should "pack each item into a new bin if the item size is greater than the least bin's remaining capacity" in {
@@ -77,7 +76,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val naiveBins = OneDimensionalBinPackingSolver.naive(items, capacity)
 
-    naiveBins should equal (List(Bin(List(Item(6)),4,0),Bin(List(Item(5)),5,1)))
+    naiveBins should equal (List(OneD_Bin(List(OneD_Item(6)),4,0),OneD_Bin(List(OneD_Item(5)),5,1)))
   }
 
   it should "pack each item into a new bin if the item size is greater than the least bin's remaining capacity" +
@@ -87,7 +86,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val naiveBins = OneDimensionalBinPackingSolver.naive(items, capacity)
 
-    naiveBins should equal (List(Bin(List(Item(6)),4,0),Bin(List(Item(8)),2,1),Bin(List(Item(3)),7,2)))
+    naiveBins should equal (List(OneD_Bin(List(OneD_Item(6)),4,0),OneD_Bin(List(OneD_Item(8)),2,1),OneD_Bin(List(OneD_Item(3)),7,2)))
   }
 
   "The First Fit strategy" should "use a number of bins that is greater than or equals the lower bound " +
@@ -109,7 +108,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val ffBins = OneDimensionalBinPackingSolver.ff(items, capacity)
 
-    ffBins should equal (List(Bin(List(Item(6),Item(3)),1,0), Bin(List(Item(8)),2,1)))
+    ffBins should equal (List(OneD_Bin(List(OneD_Item(6),OneD_Item(3)),1,0),OneD_Bin(List(OneD_Item(8)),2,1)))
   }
 
   it should "pack each item in the first bin which remaining capacity equals the item size" in {
@@ -118,7 +117,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val ffBins = OneDimensionalBinPackingSolver.ff(items, capacity)
 
-    ffBins should equal (List(Bin(List(Item(6),Item(4)),0,0), Bin(List(Item(8)),2,1)))
+    ffBins should equal (List(OneD_Bin(List(OneD_Item(6),OneD_Item(4)),0,0),OneD_Bin(List(OneD_Item(8)),2,1)))
   }
 
   it should "pack each item into a new bin if no bin has enough room for the item" in {
@@ -127,7 +126,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val ffBins = OneDimensionalBinPackingSolver.ff(items, capacity)
 
-    ffBins should equal (List(Bin(List(Item(6)),4,0),Bin(List(Item(8)),2,1),Bin(List(Item(5)),5,2)))
+    ffBins should equal (List(OneD_Bin(List(OneD_Item(6)),4,0),OneD_Bin(List(OneD_Item(8)),2,1),OneD_Bin(List(OneD_Item(5)),5,2)))
   }
 
   "The First Fit Decreasing strategy" should "use a number of bins that is greater than or equals the lower bound " +
@@ -150,7 +149,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val ffdBins = OneDimensionalBinPackingSolver.ffd(items, capacity)
 
-    ffdBins should equal (List(Bin(List(Item(8)),2,0), Bin(List(Item(6),Item(3)),1,1)))
+    ffdBins should equal (List(OneD_Bin(List(OneD_Item(8)),2,0),OneD_Bin(List(OneD_Item(6),OneD_Item(3)),1,1)))
   }
 
   it should "sort the list of items by decreasing size then" +
@@ -160,7 +159,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val ffdBins = OneDimensionalBinPackingSolver.ffd(items, capacity)
 
-    ffdBins should equal (List(Bin(List(Item(8)),2,0),Bin(List(Item(6),Item(4)),0,1)))
+    ffdBins should equal (List(OneD_Bin(List(OneD_Item(8)),2,0),OneD_Bin(List(OneD_Item(6),OneD_Item(4)),0,1)))
   }
 
   it should "sort the list of items by decreasing size then" +
@@ -170,7 +169,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val ffdBins = OneDimensionalBinPackingSolver.ffd(items, capacity)
 
-    ffdBins should equal (List(Bin(List(Item(8)),2,0),Bin(List(Item(6)),4,1),Bin(List(Item(5)),5,2)))
+    ffdBins should equal (List(OneD_Bin(List(OneD_Item(8)),2,0),OneD_Bin(List(OneD_Item(6)),4,1),OneD_Bin(List(OneD_Item(5)),5,2)))
   }
 
   "The Best Fit strategy" should "use a number of bins that is greater than or equals the lower bound " +
@@ -192,7 +191,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val bfBins = OneDimensionalBinPackingSolver.bf(items, capacity)
 
-    bfBins should equal (List(Bin(List(Item(6)),4,0),Bin(List(Item(8),Item(1)),1,1)))
+    bfBins should equal (List(OneD_Bin(List(OneD_Item(6)),4,0),OneD_Bin(List(OneD_Item(8),OneD_Item(1)),1,1)))
   }
 
   it should "pack each item into the bin which remaining capacity will be the lowest after the item is packed" +
@@ -202,7 +201,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val bfBins = OneDimensionalBinPackingSolver.bf(items, capacity)
 
-    bfBins should equal (List(Bin(List(Item(6)),4,0),Bin(List(Item(8),Item(2)),0,1)))
+    bfBins should equal (List(OneD_Bin(List(OneD_Item(6)),4,0),OneD_Bin(List(OneD_Item(8),OneD_Item(2)),0,1)))
   }
 
   it should "pack each item into a new bin if no bin has enough room for the item" in {
@@ -211,7 +210,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val bfBins = OneDimensionalBinPackingSolver.bf(items, capacity)
 
-    bfBins should equal (List(Bin(List(Item(6)),4,0),Bin(List(Item(8)),2,1),Bin(List(Item(5)),5,2)))
+    bfBins should equal (List(OneD_Bin(List(OneD_Item(6)),4,0),OneD_Bin(List(OneD_Item(8)),2,1),OneD_Bin(List(OneD_Item(5)),5,2)))
   }
 
   "The Best Fit Decreasing strategy" should "use a number of bins that is greater than or equals the lower bound " +
@@ -234,7 +233,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val bfdBins = OneDimensionalBinPackingSolver.bfd(items, capacity)
 
-    bfdBins should equal (List(Bin(List(Item(8),Item(1)),1,0),Bin(List(Item(6)),4,1)))
+    bfdBins should equal (List(OneD_Bin(List(OneD_Item(8),OneD_Item(1)),1,0),OneD_Bin(List(OneD_Item(6)),4,1)))
   }
 
   it should "sort the list of items by decreasing size then" +
@@ -245,7 +244,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val bfdBins = OneDimensionalBinPackingSolver.bfd(items, capacity)
 
-    bfdBins should equal (List(Bin(List(Item(8),Item(2)),0,0),Bin(List(Item(6)),4,1)))
+    bfdBins should equal (List(OneD_Bin(List(OneD_Item(8),OneD_Item(2)),0,0),OneD_Bin(List(OneD_Item(6)),4,1)))
   }
 
   it should "sort the list of items by decreasing size then " +
@@ -255,7 +254,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val bfdBins = OneDimensionalBinPackingSolver.bfd(items, capacity)
 
-    bfdBins should equal (List(Bin(List(Item(8)),2,0),Bin(List(Item(6)),4,1),Bin(List(Item(5)),5,2)))
+    bfdBins should equal (List(OneD_Bin(List(OneD_Item(8)),2,0),OneD_Bin(List(OneD_Item(6)),4,1),OneD_Bin(List(OneD_Item(5)),5,2)))
   }
 
   "The Worst Fit strategy" should "use a number of bins that is greater than or equals the lower bound " +
@@ -277,7 +276,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val wfBins = OneDimensionalBinPackingSolver.wf(items, capacity)
 
-    wfBins should equal (List(Bin(List(Item(6),Item(1)),3,0),Bin(List(Item(8)),2,1)))
+    wfBins should equal (List(OneD_Bin(List(OneD_Item(6),OneD_Item(1)),3,0),OneD_Bin(List(OneD_Item(8)),2,1)))
   }
 
   it should "pack each item into the bin which remaining capacity will be the lowest after the item is packed" +
@@ -287,7 +286,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val wfBins = OneDimensionalBinPackingSolver.wf(items, capacity)
 
-    wfBins should equal (List(Bin(List(Item(6),Item(4)),0,0),Bin(List(Item(8)),2,1)))
+    wfBins should equal (List(OneD_Bin(List(OneD_Item(6),OneD_Item(4)),0,0),OneD_Bin(List(OneD_Item(8)),2,1)))
   }
 
   it should "pack each item into a new bin if no bin has enough room for the item" in {
@@ -296,7 +295,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val wfBins = OneDimensionalBinPackingSolver.wf(items, capacity)
 
-    wfBins should equal (List(Bin(List(Item(6)),4,0),Bin(List(Item(8)),2,1),Bin(List(Item(5)),5,2)))
+    wfBins should equal (List(OneD_Bin(List(OneD_Item(6)),4,0),OneD_Bin(List(OneD_Item(8)),2,1),OneD_Bin(List(OneD_Item(5)),5,2)))
   }
 
   "The Worst Fit Decreasing strategy" should "use a number of bins that is greater than or equals the lower bound " +
@@ -319,7 +318,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val wfdBins = OneDimensionalBinPackingSolver.wfd(items, capacity)
 
-    wfdBins should equal (List(Bin(List(Item(8)),2,0),Bin(List(Item(6),Item(1)),3,1)))
+    wfdBins should equal (List(OneD_Bin(List(OneD_Item(8)),2,0),OneD_Bin(List(OneD_Item(6),OneD_Item(1)),3,1)))
   }
 
   it should "sort the list of items by decreasing size then" +
@@ -330,7 +329,7 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val wfdBins = OneDimensionalBinPackingSolver.wfd(items, capacity)
 
-    wfdBins should equal (List(Bin(List(Item(8)),2,0),Bin(List(Item(6),Item(4)),0,1)))
+    wfdBins should equal (List(OneD_Bin(List(OneD_Item(8)),2,0),OneD_Bin(List(OneD_Item(6),OneD_Item(4)),0,1)))
   }
 
   it should "sort the list of items by decreasing size then " +
@@ -340,6 +339,6 @@ class OneDimensionalBinPackingSpec extends FlatSpec with Matchers with PrivateMe
 
     val wfdBins = OneDimensionalBinPackingSolver.wfd(items, capacity)
 
-    wfdBins should equal (List(Bin(List(Item(8)),2,0),Bin(List(Item(6)),4,1),Bin(List(Item(5)),5,2)))
+    wfdBins should equal (List(OneD_Bin(List(OneD_Item(8)),2,0),OneD_Bin(List(OneD_Item(6)),4,1),OneD_Bin(List(OneD_Item(5)),5,2)))
   }
 }
